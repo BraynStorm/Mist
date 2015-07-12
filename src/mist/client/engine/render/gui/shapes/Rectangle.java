@@ -1,5 +1,9 @@
 package mist.client.engine.render.gui.shapes;
 
+import java.nio.FloatBuffer;
+
+import org.lwjgl.BufferUtils;
+
 import mist.client.engine.render.gui.GuiBaseElement;
 
 
@@ -8,13 +12,15 @@ public class Rectangle extends GuiBaseElement{
 	
 	private int textureID;
 	
+	private FloatBuffer colorBuffer = BufferUtils.createFloatBuffer(4*4);
+	
 	
 	public Rectangle(int width, int height) {
 		this.width = width;
 		this.height = height;
 	}
 	
-	public void setVertexColor(int id, int r, int g, int b){
+	public void setVertexColor(int id, int r, int g, int b, int a){
 		
 	}
 	
