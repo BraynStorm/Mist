@@ -23,7 +23,11 @@ public class RenderEngine {
 	
 	public void doRender(){
 		if(Mist.getInstance().getGameState() == GameState.LOGIN){
-			/* */
+			/* Render login screen and BG */
+			
+			
+			
+			return;
 		}
 	}
 	

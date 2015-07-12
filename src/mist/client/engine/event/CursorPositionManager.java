@@ -7,8 +7,8 @@ public class CursorPositionManager extends GLFWCursorPosCallback {
 	
 	boolean registered = false;
 	
-	private static int mouseX = 0;
-	private static int mouseY = 0;
+	private int mouseX = 0;
+	private int mouseY = 0;
 	
 	public CursorPositionManager(long windowID){
 		register(windowID);
@@ -25,11 +25,11 @@ public class CursorPositionManager extends GLFWCursorPosCallback {
 		mouseY = (int) ypos;
 	}
 
-	public static int getMouseX(){
+	public int getMouseX(){
 		return mouseX;
 	}
 	
-	public static int getMouseY(){
+	public int getMouseY(){
 		return mouseY;
 	}
 	

@@ -15,6 +15,8 @@ public class Mist {
 	
 	private GameState gameState;
 	
+	public static boolean isDev = true;
+	
 	public static String mainFolder = ((new File(System.getProperty("java.class.path"))).getAbsoluteFile().getParentFile().toString()).split(";")[0];
 	
 	/*

@@ -28,7 +28,8 @@ public class Version {
 	public void saveAndUpdate(){
 		String path = Mist.mainFolder + versionFilePath;
 		
-		build++;
+		if(Mist.getInstance().isDev)
+			build++;
 		
 		if(build > 1000){
 			build = 0;

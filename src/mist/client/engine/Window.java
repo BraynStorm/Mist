@@ -4,6 +4,8 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
 
+import mist.client.engine.event.EventManager;
+
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWvidmode;
@@ -50,6 +52,7 @@ public class Window implements Closeable {
 		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL_TRUE);
 		
 		w.windowID = GLFW.glfwCreateWindow(initW, initH, title, 0, 0);
+		EventManager.init(w.windowID);
 		return w;
 	}
 	
