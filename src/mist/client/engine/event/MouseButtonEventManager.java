@@ -19,6 +19,8 @@ public class MouseButtonEventManager extends GLFWMouseButtonCallback{
 	@Override
 	public void invoke(long window, int button, int action, int mods) {
 		System.out.println("MBEV: click");
+		EventManager.mouseClick(button, action, mods);
+		
 	}
 
 }

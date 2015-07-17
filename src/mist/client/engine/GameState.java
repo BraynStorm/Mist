@@ -1,5 +1,5 @@
 package mist.client.engine;
 
 public enum GameState {
-	LOGIN, CHARSELECT, INWORLD, LOADING;
+	UNKNOWN, BOOTINGUP, LOGIN, CHARSELECT, INWORLD, LOADING;
 }

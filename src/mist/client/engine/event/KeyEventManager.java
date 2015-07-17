@@ -20,7 +20,8 @@ public class KeyEventManager extends GLFWKeyCallback {
 	@Override
 	public void invoke(long window, int key, int scancode, int action, int mods) {
 		// TODO Auto-generated method stub
-		System.out.println("KEM: key hit:" + scancode);
+		System.out.println("KEM: key hit:" + key);
+		EventManager.keyEvent(key, action, mods);
 	}
 
 }

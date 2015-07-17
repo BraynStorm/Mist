@@ -5,6 +5,7 @@
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JDBC"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/BLoggery"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL 3.0"/>
+	<classpathentry kind="lib" path="E:/Development/Workspace-New/LIB/PNGDecoder.jar"/>
 	<classpathentry kind="lib" path="E:/Development/Workspace-New/LIB/slick/slick-util.jar" sourcepath="E:/Development/Workspace-New/LIB/slick/slick-util-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

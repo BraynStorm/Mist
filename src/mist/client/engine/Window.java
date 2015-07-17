@@ -51,6 +51,9 @@ public class Window implements Closeable {
 		GLFW.glfwWindowHint(GLFW.GLFW_VISIBLE, GL_FALSE);
 		GLFW.glfwWindowHint(GLFW.GLFW_RESIZABLE, GL_TRUE);
 		
+		w.width = initW;
+		w.height = initH;
+		
 		w.windowID = GLFW.glfwCreateWindow(initW, initH, title, 0, 0);
 		EventManager.init(w.windowID);
 		return w;
@@ -60,11 +63,19 @@ public class Window implements Closeable {
 		GLFW.glfwShowWindow(windowID);
 		GLFW.glfwMakeContextCurrent(windowID);
 		GLContext.createFromCurrent();
+		
+		glEnable(GL_DEPTH_TEST);
+		glEnable(GL_BLEND);
+		//glEnable(GL_CULL_FACE);
+		//glCullFace(GL_BACK);
+		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+		//glEnable(GL_TEXTURE_2D);
 		//GLFW.glfwSwapInterval(1);
 	}
 	
 	public void startRenderingCycle(){
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
+		glClearColor(0.5f, 0.5f, 0.5f, 1);
 	}
 	
 	public void endRenderingCycle(){
@@ -96,4 +107,17 @@ public class Window implements Closeable {
 		GLFW.glfwDestroyWindow(windowID);
 		GLFW.glfwTerminate();
 	}
+
+	public int getWidth() {
+		return width;
+	}
+
+	public int getHeight() {
+		return height;
+	}
+
+	public static String getTitle() {
+		return title;
+	}
+	
 }

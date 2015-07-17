@@ -10,6 +10,9 @@ public class CursorPositionManager extends GLFWCursorPosCallback {
 	private int mouseX = 0;
 	private int mouseY = 0;
 	
+	private int oldX;
+	private int oldY;
+	
 	public CursorPositionManager(long windowID){
 		register(windowID);
 	}
@@ -21,8 +24,13 @@ public class CursorPositionManager extends GLFWCursorPosCallback {
 	
 	@Override
 	public void invoke(long window, double xpos, double ypos) {
+		oldX = mouseX;
+		oldY = mouseY;
+		
 		mouseX = (int) xpos;
 		mouseY = (int) ypos;
+		
+		EventManager.mouseMove(oldX - mouseX, oldY - mouseY);
 	}
 
 	public int getMouseX(){

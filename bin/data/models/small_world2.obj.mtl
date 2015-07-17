@@ -1,0 +1,13 @@
+# File produced by Open Asset Import Library (http://www.assimp.sf.net)
+# (assimp v3.1.29665513)
+
+newmtl Grass
+kd 0.64 0.64 0.64
+ka 0 0 0
+ks 0 0 0
+ke 0 0 0
+d 1
+Ns 384.314
+illum 2
+map_kd E:\\Development\\Workspace-New\\Mist\\bin\\data\\textures\\terrain.png
+
