@@ -2,34 +2,42 @@ package mist.client.engine.render;
 
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.GL11;
+
 import mist.client.engine.GameState;
 import mist.client.engine.Mist;
+import mist.client.engine.Time;
 import mist.client.engine.Window;
 import mist.client.engine.render.core.Camera;
-import mist.client.engine.render.core.Matrix4f;
 import mist.client.engine.render.core.Model;
 import mist.client.engine.render.core.Shader;
-import mist.client.engine.render.core.Texture;
 import mist.client.engine.render.core.Transform;
+import mist.client.engine.render.gui.Font;
 import mist.client.engine.render.loaders.ModelLoader;
 import mist.client.engine.render.loaders.TextureLoader;
 
+
 public class RenderEngine {
 	
-	private Window window;
-	private Shader worldShader;
-	private Shader guiShader;
-	private Camera camera;
-	private Texture lol;
-	private float fps;
+	private static Window window;
+	private static Shader worldShader = new Shader();
+	private static Shader guiShader = new Shader();
+	private static Camera camera;
+	private static float fps = 0;
 	
-	private ArrayList<Model> world;
+	private static ArrayList<Model> world = new ArrayList<Model>();
+	private static ArrayList<Drawable> gui = new ArrayList<Drawable>();
 	
-	public RenderEngine(Window window, Camera cam){
-		this.window = window;
-		camera = cam;
+	
+	private static GameState lastState = GameState.UNKNOWN;
+	private static GameState nowState = GameState.BOOTINGUP;
+	private static int i = 0;
+	private static int frameCounter = 0;
+	
+	public static void prepare(){
+		RenderEngine.window = Mist.getInstance().getWindow();
+		camera = Mist.getInstance().getCamera();
 		
-		worldShader = new Shader();
 		worldShader.loadShader("world");
 		worldShader.addUniform("projection_transform");
 		worldShader.addUniform("model_transform");
@@ -37,58 +45,19 @@ public class RenderEngine {
 		worldShader.addUniform("model_hasTexture");
 		worldShader.addUniform("camera_transform");
 		
-		guiShader = new Shader();
-		
-		world = new ArrayList<Model>();
-		fps = 0;
+		guiShader.loadShader("gui");
+		guiShader.addUniform("model_transform");
+		guiShader.addUniform("model_color");
+		guiShader.addUniform("model_hasTexture");
 		
 		loadLoginScreen();
-		
-	}
-	
-	public void addToWorldRender(Model object){
-		world.add(object);
-	}
-	
-	public void addToGUIRenderer(Drawable object){
-		
 	}
 	
 	
-	public void startCycle(){
-		long lastTime = 0;
-		long nowTime = 0;
-		long frames = 0; 
+	public static void loop(){
+		window.startRenderingCycle();
+		fps = (frameCounter * 1000 * 1000) / Time.getDelta();
 		
-		lol = TextureLoader.getTexture("tex_cube");
-		lol.bind();
-		while(!window.shouldClose()){
-			nowTime = System.currentTimeMillis();
-			
-			if(nowTime > (lastTime + 1000)){
-				fps = (1000 * frames)/(nowTime - lastTime + 1000);
-				frames = 0;
-				System.out.println(fps);
-				lastTime = nowTime;
-			}
-			
-			window.startRenderingCycle();
-			
-			/* Render */
-			cycle();
-			
-			window.endRenderingCycle();
-			
-			frames++;
-		}
-		
-	}
-	
-	private static GameState lastState = GameState.UNKNOWN;
-	private static GameState nowState = GameState.BOOTINGUP;
-	private static int i = 0;
-	
-	public void cycle(){
 		nowState = Mist.getInstance().getGameState();
 		
 		worldShader.bind();
@@ -106,10 +75,17 @@ public class RenderEngine {
 				break;
 			case LOGIN:
 				worldShader.bind();
+				
 				for(Model model : world){
-					model.render();
-					model.setRotation(-30f, (i/100.0f), 0);
+					TextureLoader.bindTexture("tex_cube");
+					//model.render();
+					model.setRotation(-30f, (i/10.0f), 0);
 				}
+				
+				guiShader.bind();
+				fontTransform.setRotation(0, 0, i/10.0f);
+				font.renderChar(0, fontTransform);
+				
 				break;
 			case LOADING:
 				break;
@@ -124,20 +100,48 @@ public class RenderEngine {
 		}
 		i++;
 		lastState = nowState;
+		window.endRenderingCycle();
+		frameCounter++;
 	}
 	
-	private void loadLoginScreen(){
+	
+	private static Font font;
+	private static Transform fontTransform;
+	private static void loadLoginScreen(){
 		ModelLoader.loadModel("tex_cube", false, false);
-		
+		TextureLoader.loadTexture("tex_cube", "tex_cube", false, GL11.GL_NEAREST);
+		TextureLoader.loadTexture("calibri", "Calibri", false, GL11.GL_NEAREST);
+		font = new Font(guiShader, "calibri");
+		fontTransform = new Transform();
+		fontTransform.setTranslation(0, 0, -0.5f);
+		fontTransform.setRotation(170, 0, 0);
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
 		//world.get(0).setScale(1f, 1f, 1f);
 		//world.get(0).setTranslation(0, 0, -15f);
 		world.get(0).setTranslation(0, 0, 5f);
+		
+		
+		
+	}
+	
+	public static void addToWorldRender(Model object){
+		world.add(object);
+	}
+	
+	public static void addToGUIRenderer(Drawable object){
+		gui.add(object);
 	}
 
-	public void destroy() {
+	public static void destroy() {
 		worldShader.delete();
 		guiShader.delete();
+		
+	}
+
+
+	public static void setProps(Window gameWindow, Camera camera) {
+		RenderEngine.window = gameWindow;
+		RenderEngine.camera = camera;
 		
 	}
 	

@@ -51,7 +51,7 @@ public class Mist {
 		gameWindow.show();
 		camera = new Camera();
 		EventManager.setCamera(camera);
-		renderEngine = new RenderEngine(gameWindow, camera);
+		RenderEngine.setProps(gameWindow, camera);
 		
 		
 		// GUI
@@ -66,8 +66,16 @@ public class Mist {
 	
 	public void cycle(){
 		System.out.println(glGetString(GL_VERSION));
-		EventManager.loadConfigValues();
-		renderEngine.startCycle();
+		
+		EventManager.prepare();
+		RenderEngine.prepare();
+		
+		while(!gameWindow.shouldClose()){
+			Time.loop();
+			EventManager.loop();
+			RenderEngine.loop();
+		}
+		
 		clientVersion.saveAndUpdate();
 		closingStage();
 	}

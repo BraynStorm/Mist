@@ -8,6 +8,7 @@ import java.util.HashMap;
 
 import org.newdawn.slick.TrueTypeFont;
 
+@Deprecated
 public class FontLibrary {
 	
 	private Font defaultFont;

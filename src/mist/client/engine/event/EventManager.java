@@ -26,7 +26,7 @@ public class EventManager {
 		keyboard = new KeyEventManager(windowID);
 	}
 	
-	public static void loadConfigValues(){
+	public static void prepare(){
 		mouseSpeed = Mist.getInstance().getConfigValuef("mouse_speed");
 	}
 	
@@ -37,7 +37,12 @@ public class EventManager {
 	public static void keyEvent(int keycode, int action, int mods){
 		boolean keyDown = (action == GLFW.GLFW_KEY_DOWN);
 		pressedKeys[keycode] = keyDown;
-		System.out.println(action);
+		
+		//System.out.println(action);
+	}
+	
+	public static void loop(){
+		// TODO: MOVEMENT!!!!
 	}
 	
 	
