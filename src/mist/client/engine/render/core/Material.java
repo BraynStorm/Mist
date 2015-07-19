@@ -2,13 +2,21 @@ package mist.client.engine.render.core;
 
 public class Material {
 	
-	private int textureID;
-	private float ns;
-	private float ka;
+	protected int textureID;
+	protected Vector3f ka;
+	protected Vector3f kd;
+	protected Vector3f ks;
+	protected Vector3f ke = new Vector3f (0,0,0);
+	
+	protected float d;
+	protected float ns;
+	protected float illum;
 	
 	public Material(int textureID) {
 		this.textureID = textureID;
 	}
+	
+	public Material() {}
 
 	public int getTextureID() {
 		return textureID;
@@ -16,6 +24,38 @@ public class Material {
 
 	public void setTextureID(int textureID) {
 		this.textureID = textureID;
+	}
+
+	public Vector3f getKa() {
+		return ka;
+	}
+
+	public void setKa(Vector3f ka) {
+		this.ka = ka;
+	}
+
+	public Vector3f getKd() {
+		return kd;
+	}
+
+	public void setKd(Vector3f kd) {
+		this.kd = kd;
+	}
+
+	public Vector3f getKs() {
+		return ks;
+	}
+
+	public void setKs(Vector3f ks) {
+		this.ks = ks;
+	}
+
+	public float getD() {
+		return d;
+	}
+
+	public void setD(float d) {
+		this.d = d;
 	}
 
 	public float getNs() {
@@ -26,14 +66,20 @@ public class Material {
 		this.ns = ns;
 	}
 
-	public float getKa() {
-		return ka;
+	public float getIllum() {
+		return illum;
 	}
 
-	public void setKa(float ka) {
-		this.ka = ka;
+	public void setIllum(float illum) {
+		this.illum = illum;
 	}
-	
-	
+
+	public Vector3f getKe() {
+		return ke;
+	}
+
+	public void setKe(Vector3f ke) {
+		this.ke = ke;
+	}
 
 }

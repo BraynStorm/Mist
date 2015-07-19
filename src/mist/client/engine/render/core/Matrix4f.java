@@ -119,7 +119,6 @@ public class Matrix4f {
 		float zRange = zNear - zFar;
 		
 		float aspect = (0.0f + Mist.getInstance().getWindow().getWidth()) / Mist.getInstance().getWindow().getHeight();
-		System.out.println("projection " + aspect);
 		float tanHalfFOV = (float) Math.tan(Math.toRadians(fov / 2));
 		
 		m[0][0] = 1.0f / (aspect * tanHalfFOV);		m[0][1] = 0;					m[0][2] = 0;							m[0][3] = 0;

@@ -56,8 +56,8 @@ public class Mist {
 		
 		// GUI
 		try {
-			TextureLoader.loadTexture("button_stripe_normal", "button_stripe", false, GL11.GL_LINEAR);
-			TextureLoader.loadTexture("tex_cube", "tex_cube", false, GL11.GL_LINEAR);
+			TextureLoader.loadTexture("button_stripe", false, GL11.GL_LINEAR);
+			//TextureLoader.loadTexture("tex_cube", false, GL11.GL_LINEAR);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class Mist {
 	
 	private void closingStage(){
 		ModelLoader.destroy();
-		renderEngine.destroy();
+		RenderEngine.destroy();
 		int k = GL11.glGetError();
 		System.out.println(k);
 		while (k != 0){

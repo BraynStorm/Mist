@@ -15,6 +15,10 @@ public class Vector3f {
 		return new float[] { x, y, z };
 	}
 	
+	public Vector3f clone(){
+		return new Vector3f(x,y,z);
+	}
+	
 	/* MATH */
 	
 	public float length(){
@@ -28,6 +32,21 @@ public class Vector3f {
 	public Vector3f getNormalized(){
 		Vector3f v = new Vector3f(x, y, z);
 		return v.normalize();
+	}
+	
+	public Vector3f rotateAroundAxis(float angle, Vector3f axis){
+		Vector3f n = axis.getNormalized();
+		Vector3f v = this.clone();
+		angle = (float) Math.toRadians(angle);
+		
+		v.mul( (float) Math.cos(angle));
+		v.add( n.mul(this.dot(n)).mul(1-(float) Math.cos(angle)) );
+		v.add(n.cross(this).mul((float)Math.sin(angle)));
+		
+		x = v.x;
+		y = v.y;
+		z = v.z;		
+		return this;
 	}
 	
 	public Vector3f normalize(){

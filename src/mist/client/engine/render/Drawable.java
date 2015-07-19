@@ -1,6 +1,8 @@
 package mist.client.engine.render;
 
 import static org.lwjgl.opengl.GL11.GL_FLOAT;
+import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
+import static org.lwjgl.opengl.GL11.glBindTexture;
 import static org.lwjgl.opengl.GL11.GL_TRIANGLES;
 import static org.lwjgl.opengl.GL11.GL_UNSIGNED_INT;
 import static org.lwjgl.opengl.GL11.glDrawElements;
@@ -12,7 +14,6 @@ import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 
 import mist.client.engine.render.core.Material;
-import mist.client.engine.render.core.Matrix4f;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Transform;
 import mist.client.engine.render.core.Vector3f;
@@ -56,13 +57,23 @@ public abstract class Drawable {
 		color.w = a/255;
 	}
 	
+	protected void bindTexture(){
+		if(material.getTextureID() != 0){
+			glBindTexture(GL_TEXTURE_2D, material.getTextureID());
+		}
+	}
+	
 	public void render(){
+		
+		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		
+		bindTexture();
+		
 		shader.setUniform("model_color", color);
 		shader.setUniform("model_transform", transform.getTansformation());
-		shader.setUniformi("model_hasTexture", 1 /*material.getTextureID() == 0 ? 0 : 1*/);
+		shader.setUniformi("model_hasTexture", material.getTextureID() == 0 ? 0 : 1);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0); // positions

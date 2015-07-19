@@ -19,9 +19,9 @@ public class TextureLoader {
 	
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 	
-	public static void loadTexture(String name, String path, boolean flipped, int filter){
+	public static Texture loadTexture(String name, boolean flipped, int filter){
 		try {
-			PNGDecoder decoder = new PNGDecoder(new FileInputStream(new File(texturesPath + path + ".png")));
+			PNGDecoder decoder = new PNGDecoder(new FileInputStream(new File(texturesPath + name + ".png")));
 			ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
 			decoder.decode(buffer, decoder.getWidth() * 4, Format.RGBA);
 			buffer.flip();
@@ -41,11 +41,13 @@ public class TextureLoader {
 			
 			Texture t = new Texture(textureID,  decoder.getWidth(), decoder.getHeight(), Format.RGBA);
 			textures.put(name, t);
+			return t;
 			
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		return null;
 	}
 	
 	public static void bindTexture(String name){

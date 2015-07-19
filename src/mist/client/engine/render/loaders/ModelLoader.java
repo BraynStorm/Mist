@@ -24,7 +24,7 @@ public class ModelLoader {
 	
 	private static HashMap<String, ModelTemplate> models = new HashMap<String, ModelTemplate>();
 	
-	public static void loadModel(String name, boolean autoLoadMaterials, boolean autoLoadTextures){
+	public static void loadModel(String name){
 		String filename = name + ".obj";
 		System.out.println(modelsPath + filename);
 		
@@ -54,10 +54,7 @@ public class ModelLoader {
 					case "o":
 						continue;
 					case "mtllib":
-						if(autoLoadMaterials){
-							materialName = parts[1].substring(0, parts[1].length() - 4);
-							MaterialLoader.loadMaterial(materialName, parts[1], autoLoadTextures);
-						}
+						materialName = MaterialLoader.loadMaterial(parts[1]);
 						break;
 					case "v":
 						positions.add(
@@ -86,7 +83,7 @@ public class ModelLoader {
 							int tex = 0;
 							
 							//Texture
-							if(p[1].length() > 0){
+							if(p.length > 1 && p[1].length() > 0){
 								tex = Integer.parseInt(p[1]) - 1;
 							}
 							

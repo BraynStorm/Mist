@@ -20,13 +20,6 @@ public class Transform {
 		return translationMatrix.mul(rotationMatrix.mul(scaleMatrix));
 	}
 	
-	public Matrix4f getTansformationBone(){
-		Matrix4f translationMatrix = new Matrix4f().translation(translation);
-		Matrix4f rotationMatrix = new Matrix4f().rotate(rotation);
-		
-		return rotationMatrix.mul(translationMatrix);
-	}
-	
 	public static Matrix4f getProjection(String suffix) {
 		return new Matrix4f().projection(suffix);
 	}
@@ -65,6 +58,10 @@ public class Transform {
 	
 	public void setScale(float x, float y, float z) {
 		this.scale = new Vector3f(x, y, z);
+	}
+
+	public void rotateBy(float angle, Vector3f axis) {
+		
 	}
 	
 }

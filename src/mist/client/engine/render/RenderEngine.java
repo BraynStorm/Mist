@@ -42,6 +42,7 @@ public class RenderEngine {
 		worldShader.addUniform("model_color");
 		worldShader.addUniform("model_hasTexture");
 		worldShader.addUniform("camera_transform");
+		worldShader.addUniform("bone");
 		
 		guiShader.loadShader("gui");
 		guiShader.addUniform("model_transform");
@@ -76,7 +77,6 @@ public class RenderEngine {
 				
 				worldShader.bind();
 				for(Model model : world){
-					TextureLoader.bindTexture("tex_cube");
 					model.render();
 					model.setRotation(-30f, movement * 100, 0);
 				}
@@ -111,10 +111,8 @@ public class RenderEngine {
 	
 	private static void loadLoginScreen(){
 		
-		ModelLoader.loadModel("tex_cube", false, false);
-		
-		TextureLoader.loadTexture("tex_cube", "tex_cube", false, GL11.GL_NEAREST);
-		TextureLoader.loadTexture("calibri", "Calibri", false, GL11.GL_NEAREST);
+		ModelLoader.loadModel("tex_cube");
+		ModelLoader.loadModel("skeleton_test2");
 		
 		font = new Font(guiShader, "calibri");
 		fontTransform = new Transform();
@@ -122,7 +120,10 @@ public class RenderEngine {
 		fontTransform.setRotation(170, 0, 0);
 		
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
+		world.add(ModelLoader.getNewModel("skeleton_test2", worldShader));
 		world.get(0).setTranslation(0, 0, 5f);
+		world.get(1).setTranslation(0, 0, 5f);
+		world.get(1).setColor(0, 200, 212, 255);
 		
 		
 		

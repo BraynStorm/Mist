@@ -14,7 +14,7 @@ void main(){
   }
   
   if(texPixel.w == 0.0){
-    color.w = 1;
+    //color.w = 1;
     gl_FragColor = color;
     return;
   }else{

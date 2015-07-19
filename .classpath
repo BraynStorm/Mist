@@ -3,9 +3,9 @@
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/JDBC"/>
-	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.USER_LIBRARY/LWJGL 3.0"/>
 	<classpathentry kind="lib" path="lib/mysql-connector-java-5.1.35-bin.jar"/>
-	<classpathentry kind="lib" path="lib/PNGDecoder.jar"/>
-	<classpathentry kind="lib" path="lib/slick/slick-util.jar" sourcepath="lib/slick/slick-util-src.zip"/>
+	<classpathentry kind="lib" path="E:/Development/Workspace-New/Mist/lib/PNGDecoder.jar"/>
+	<classpathentry kind="lib" path="E:/Development/Workspace-New/Mist/lib/slick/slick-util.jar" sourcepath="lib/slick/slick-util-src.zip"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -4,14 +4,10 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
-import mist.client.engine.render.Drawable;
-
-import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
 
 
-public class ModelTemplate implements Cloneable{
+public class ModelTemplate{
 	
 	Material material;
 	private int vbo;
@@ -25,7 +21,6 @@ public class ModelTemplate implements Cloneable{
 		IntBuffer indexData = Face.meshify(faces);
 		
 		drawCount = indexData.capacity();
-		System.out.println(vertexData.capacity() / Vertex.SIZE + " " + drawCount);
 		
 		vbo = glGenBuffers();
 		ibo = glGenBuffers();
@@ -46,11 +41,6 @@ public class ModelTemplate implements Cloneable{
 		this.ibo = ibo;
 		this.drawCount = drawCount;
 	}
-
-
-	public void setColor(int r, int g, int b, int a){
-		
-	}
 	
 	public Model newModel(Shader shader){
 		return new Model(shader, vbo, ibo, drawCount, material);
@@ -61,9 +51,6 @@ public class ModelTemplate implements Cloneable{
 		glDeleteBuffers(ibo);
 	}
 	
-	
-	
-
 	public void setMaterial(Material material) {
 		this.material = material;
 	}
