@@ -139,5 +139,14 @@ public class Vector3f {
 		return new Vector3f(-x, -y, -z);
 	}
 
+	public static float getDistance(Vector3f head, Vector3f vertexPosition) {
+		return (float) Math.sqrt
+		(
+			Math.pow(head.x - vertexPosition.x, 2) +
+			Math.pow(head.y - vertexPosition.y, 2) +
+			Math.pow(head.z - vertexPosition.z, 2)
+		);
+	}
+
 }
 

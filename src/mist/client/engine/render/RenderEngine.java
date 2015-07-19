@@ -31,8 +31,6 @@ public class RenderEngine {
 	
 	private static GameState lastState = GameState.UNKNOWN;
 	private static GameState nowState = GameState.BOOTINGUP;
-	private static int i = 0;
-	private static int frameCounter = 0;
 	
 	public static void prepare(){
 		RenderEngine.window = Mist.getInstance().getWindow();
@@ -53,10 +51,11 @@ public class RenderEngine {
 		loadLoginScreen();
 	}
 	
+	private static float movement = 0;
 	
 	public static void loop(){
 		window.startRenderingCycle();
-		fps = (frameCounter * 1000 * 1000) / Time.getDelta();
+		fps = (float)(1 / Time.getDeltaSeconds());
 		
 		nowState = Mist.getInstance().getGameState();
 		
@@ -74,17 +73,20 @@ public class RenderEngine {
 				Mist.getInstance().setGameState(GameState.LOGIN);
 				break;
 			case LOGIN:
-				worldShader.bind();
 				
+				worldShader.bind();
 				for(Model model : world){
 					TextureLoader.bindTexture("tex_cube");
-					//model.render();
-					model.setRotation(-30f, (i/10.0f), 0);
+					model.render();
+					model.setRotation(-30f, movement * 100, 0);
 				}
 				
-				guiShader.bind();
-				fontTransform.setRotation(0, 0, i/10.0f);
-				font.renderChar(0, fontTransform);
+				//guiShader.bind();
+				//for(Drawable drawble : gui){ TODO
+				//	
+				//}
+				//fontTransform.setRotation(0 , 0, movement * 000);
+				//font.renderChar(0, fontTransform);
 				
 				break;
 			case LOADING:
@@ -98,26 +100,28 @@ public class RenderEngine {
 				break;
 			default: break;
 		}
-		i++;
 		lastState = nowState;
 		window.endRenderingCycle();
-		frameCounter++;
+		movement += Time.getDeltaSeconds();
 	}
 	
 	
 	private static Font font;
 	private static Transform fontTransform;
+	
 	private static void loadLoginScreen(){
+		
 		ModelLoader.loadModel("tex_cube", false, false);
+		
 		TextureLoader.loadTexture("tex_cube", "tex_cube", false, GL11.GL_NEAREST);
 		TextureLoader.loadTexture("calibri", "Calibri", false, GL11.GL_NEAREST);
+		
 		font = new Font(guiShader, "calibri");
 		fontTransform = new Transform();
 		fontTransform.setTranslation(0, 0, -0.5f);
 		fontTransform.setRotation(170, 0, 0);
+		
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
-		//world.get(0).setScale(1f, 1f, 1f);
-		//world.get(0).setTranslation(0, 0, -15f);
 		world.get(0).setTranslation(0, 0, 5f);
 		
 		

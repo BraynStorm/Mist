@@ -6,7 +6,7 @@ import mist.client.engine.render.core.Material;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Transform;
 
-public class GuiButton extends GuiBaseActiveElemеnt {
+public class GuiButton extends GuiBaseActiveElement {
 
 	public GuiButton(Shader shader, int vbo, int ibo, int drawCount,
 			Material material) {

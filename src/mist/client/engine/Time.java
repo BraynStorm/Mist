@@ -9,7 +9,11 @@ public class Time {
 		lastTime = System.nanoTime();
 	}
 	
-	public static float getDelta(){
+	public static double getDelta(){
 		return System.nanoTime() - lastTime;
+	}
+	
+	public static double getDeltaSeconds(){
+		return getDelta() / 1000000000;
 	}
 }

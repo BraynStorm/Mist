@@ -65,11 +65,13 @@ public class Window implements Closeable {
 		GLContext.createFromCurrent();
 		
 		glEnable(GL_DEPTH_TEST);
+		
+		glFrontFace(GL_CW);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		
 		glEnable(GL_BLEND);
-		//glEnable(GL_CULL_FACE);
-		//glCullFace(GL_BACK);
 		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		//glEnable(GL_TEXTURE_2D);
 		//GLFW.glfwSwapInterval(1);
 	}
 	

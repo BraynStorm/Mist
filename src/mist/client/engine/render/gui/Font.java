@@ -30,10 +30,10 @@ public class Font {
 		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(4 * 5);
 		buffer.put(new float[]{ // 0.44356435f  0.33673267f
-				-0.5f,  0.5f, 1, 0.33673267f, 0.44356435f, //0, 1,
-				 0.5f,  0.5f, 1, 0.44356435f, 0.44356435f,//1, 1,
-				 0.5f, -0.5f, 1, 0.44356435f, 0.33673267f,//1, 0,
-				-0.5f, -0.5f, 1, 0.33673267f, 0.33673267f,//0, 0 
+				-0.5f,  0.3f, 1, 0.33673267f, 0.33673267f, //0, 1,
+				 0.5f,  0.5f, 1, 0.44356435f, 0.33673267f,//1, 1,
+				 0.5f, -0.5f, 1, 0.44356435f, 0.44356435f,//1, 0,
+				-0.5f, -0.5f, 1, 0.33673267f, 0.44356435f //0, 0 
 		});
 		buffer.flip();
 		
@@ -52,7 +52,6 @@ public class Font {
 			
 			glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 			glBufferData(GL_ELEMENT_ARRAY_BUFFER, ibob, GL_STATIC_DRAW);
-			System.out.println("                          LOL");
 		}
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
 		glBindBuffer(GL_ARRAY_BUFFER, 0);

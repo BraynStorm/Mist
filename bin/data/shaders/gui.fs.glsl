@@ -8,14 +8,15 @@ in vec2 texCoord0;
 
 void main(){
   vec4 texPixel = vec4(0,0,0,0);
-  vec4 color = model_color;
+  
   if(model_hasTexture == 1){
     texPixel = texture2D(diffuse, texCoord0);
   }
   
-  if(texPixel.w == 0.0){
-    color.w = 1;
-    gl_FragColor = color;
+  if(texPixel.w <= 0.3){
+	//For testing purposes:
+	gl_FragColor = vec4(model_color.xyz, 1);
+    //gl_FragColor = model_color;
     return;
   }else{
     gl_FragColor = vec4(
