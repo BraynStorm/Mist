@@ -1,8 +1,7 @@
 package mist.client.engine.render;
 
+import java.awt.Font;
 import java.util.ArrayList;
-
-import org.lwjgl.opengl.GL11;
 
 import mist.client.engine.GameState;
 import mist.client.engine.Mist;
@@ -12,9 +11,10 @@ import mist.client.engine.render.core.Camera;
 import mist.client.engine.render.core.Model;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Transform;
-import mist.client.engine.render.core.fonts._Font;
+import mist.client.engine.render.core.Vector4f;
+import mist.client.engine.render.core.fonts.FontLibrary;
+import mist.client.engine.render.core.fonts.TrueTypeFont;
 import mist.client.engine.render.loaders.ModelLoader;
-import mist.client.engine.render.loaders.TextureLoader;
 
 
 public class RenderEngine {
@@ -45,9 +45,12 @@ public class RenderEngine {
 		worldShader.addUniform("bone");
 		
 		guiShader.loadShader("gui");
+		guiShader.addUniform("model_isFont");
 		guiShader.addUniform("model_transform");
 		guiShader.addUniform("model_color");
 		guiShader.addUniform("model_hasTexture");
+		
+		fontTransform = new Transform();
 		
 		loadLoginScreen();
 	}
@@ -77,7 +80,7 @@ public class RenderEngine {
 				
 				worldShader.bind();
 				for(Model model : world){
-					model.render();
+					//model.render();
 					model.setRotation(-30f, movement * 100, 0);
 				}
 				
@@ -85,9 +88,10 @@ public class RenderEngine {
 				//for(Drawable drawble : gui){ TODO
 				//	
 				//}
-				//fontTransform.setRotation(0 , 0, movement * 000);
+				fontTransform.setTranslation(0.5f, 0.5f, 1);
+				fontTransform.setRotation(0 , 0, movement * 100);
 				//font.renderChar(0, fontTransform);
-				
+				font.drawString(fontTransform, "LOL", new Vector4f(5,5,5,1));
 				break;
 			case LOADING:
 				break;
@@ -108,27 +112,21 @@ public class RenderEngine {
 	}
 	
 	
-	private static _Font font;
+	private static TrueTypeFont font;
 	private static Transform fontTransform;
 	
 	private static void loadLoginScreen(){
 		
 		ModelLoader.loadModel("tex_cube");
-		//ModelLoader.loadModel("skeleton_test2");
 		
-		//font = new _Font(guiShader, "calibri");
-		//fontTransform = new Transform();
-		//fontTransform.setTranslation(0, 0, -0.5f);
-		//fontTransform.setRotation(170, 0, 0);
+		font = FontLibrary.requestFontWithSize(guiShader, "Calibri", Font.TRUETYPE_FONT, 20);
 		
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
-		//world.add(ModelLoader.getNewModel("skeleton_test2", worldShader));
 		world.get(0).setTranslation(0, 0, 5f);
-		//world.get(1).setTranslation(0, 0, 5f);
-		//world.get(1).setColor(0, 200, 212, 255);
 		
 		
-		
+		guiShader.bind();
+		guiShader.setUniformi("model_isFont", 1);
 	}
 	
 	public static void addToWorldRender(Model object){

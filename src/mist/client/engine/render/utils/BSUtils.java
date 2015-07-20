@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
+import mist.client.engine.render.core.Texture;
 import mist.client.engine.render.core.Vector2f;
 import mist.client.engine.render.core.Vector3f;
 import mist.client.engine.render.core.Vector3i;
@@ -14,6 +15,8 @@ import org.lwjgl.BufferUtils;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL30;
+
+import de.matthiasmann.twl.utils.PNGDecoder.Format;
 
 public class BSUtils {
 	public static FloatBuffer floatBufferFrom3DList(ArrayList<Vector3f> list){
@@ -75,25 +78,25 @@ public class BSUtils {
 		
 	}
 	
-	public static int textureFromImage(BufferedImage img){
+	public static Texture textureFromBufferedImage(BufferedImage img){
 		int id = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, id);
 		int width = img.getWidth();
 		int height = img.getHeight();
 		int color = 0;
-		float[] data = new float [width  * height];
 		
-		int ii = 0;
-		for(int i = height - 1; i >= 0; i++){
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(width  * height * 3);
+		
+		for(int i = height - 1; i >= 0; i--){
 			for(int j = 0; j < width; j++){
 				color = img.getRGB(i, j);
-				data[ii * width + j + 3] = color & 0xFF;
-				
+				buffer.put(0);
+				buffer.put(0);
+				buffer.put(color & 0xFF);
 			}
-			ii++;
 		}
 		
-		FloatBuffer buffer = FloatBuffer.wrap(data);
+		
 		buffer.flip(); // TODO: Chcek if flipping is neaded;
 		
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
@@ -102,9 +105,9 @@ public class BSUtils {
 		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_FLOAT, buffer);
-		
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGB, GL11.GL_FLOAT, buffer);
+		Texture t = new Texture(id, width, height, Format.RGBA);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
-		return id;
+		return t;
 	}
 }

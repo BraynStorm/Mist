@@ -12,6 +12,7 @@ public class Texture {
 	public int textureID;
 	
 	Format format;
+	
 	int width;
 	int height;
 	
