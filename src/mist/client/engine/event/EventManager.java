@@ -3,6 +3,7 @@ package mist.client.engine.event;
 import org.lwjgl.glfw.GLFW;
 
 import mist.client.engine.Mist;
+import mist.client.engine.Time;
 import mist.client.engine.render.core.Camera;
 
 public class EventManager {
@@ -35,7 +36,7 @@ public class EventManager {
 	}
 	
 	public static void keyEvent(int keycode, int action, int mods){
-		boolean keyDown = (action == GLFW.GLFW_KEY_DOWN);
+		boolean keyDown = (action == GLFW.GLFW_KEY_DOWN || action == GLFW.GLFW_REPEAT);
 		pressedKeys[keycode] = keyDown;
 		
 		//System.out.println(action);
@@ -43,6 +44,10 @@ public class EventManager {
 	
 	public static void loop(){
 		// TODO: MOVEMENT!!!!
+		
+		if(pressedKeys[GLFW.GLFW_KEY_W]){
+			camera.move(camera.getForward(), (float)Time.getDeltaSeconds() * 1);
+		}
 	}
 	
 	
@@ -62,8 +67,8 @@ public class EventManager {
 	
 	public static void mouseMove(int x, int y){
 		if(mouseLocked){
-			camera.rotateX((float)y / mouseSpeed, true);
-			camera.rotateY((float)x / mouseSpeed, true);
+			camera.rotateX(-(float)y / mouseSpeed, true);
+			camera.rotateY(-(float)x / mouseSpeed, true);
 		}
 	}
 }

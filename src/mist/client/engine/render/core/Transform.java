@@ -59,6 +59,12 @@ public class Transform {
 	public void setScale(float x, float y, float z) {
 		this.scale = new Vector3f(x, y, z);
 	}
+	
+	public void moveBy(float x, float y, float z){
+		translation.x += x;
+		translation.y += y;
+		translation.z += z;
+	}
 
 	public void rotateBy(float angle, Vector3f axis) {
 		

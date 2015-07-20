@@ -67,6 +67,14 @@ public class Camera {
 		return getLeft().invert();
 	}
 	
+	public Vector3f getForward(){
+		return forward;
+	}
+	
+	public Vector3f getBackward(){
+		return forward.getInverted();
+	}
+	
 	public void rotateX(float angle, boolean respectLimits){
 		if(respectLimits){
 			if(lockRotX) return;
