@@ -14,12 +14,10 @@ void main(){
     texPixel = texture2D(diffuse, texCoord0);
   }
   
-  
   if(model_isFont == 1){
-      gl_FragColor=vec4(0,0,0,1);
-      return;
-      texPixel = vec4(model_color.xyz, texPixel.r);
+      texPixel = vec4(model_color.xyz, texPixel.w);
       gl_FragColor = texPixel;
+      return;
   }
   
   if(texPixel.w <= 0.3){

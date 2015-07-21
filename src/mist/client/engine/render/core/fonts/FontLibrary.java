@@ -17,9 +17,9 @@ public class FontLibrary {
 	public static HashMap<String, TrueTypeFont> fontLibrary = new HashMap<String, TrueTypeFont>();
 	
 	public static TrueTypeFont requestFontWithSize(Shader shader, String fontName, int style, int size){
-		for(Entry<String, TrueTypeFont> entry : fontLibrary.entrySet())
-			if(entry.getValue().equals(fontName, style, size))
-				return entry.getValue();
+		//for(Entry<String, TrueTypeFont> entry : fontLibrary.entrySet())
+		//	if(entry.getValue().equals(fontName, style, size))
+		//		return entry.getValue();
 		
 		//Otherwise...
 		

@@ -85,14 +85,15 @@ public class BSUtils {
 		int height = img.getHeight();
 		int color = 0;
 		
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(width  * height * 3);
+		FloatBuffer buffer = BufferUtils.createFloatBuffer(width  * height * 4);
 		
 		for(int i = height - 1; i >= 0; i--){
 			for(int j = 0; j < width; j++){
 				color = img.getRGB(i, j);
-				buffer.put(0);
-				buffer.put(0);
-				buffer.put(color & 0xFF);
+				buffer.put( ((color & 0xFF0000) >> 16)		/ 255);
+				buffer.put( ((color & 0xFF00)   >> 8)		/ 255);
+				buffer.put(  (color & 0xFF)					/ 255);
+				buffer.put( ((color & 0xFF000000) >>> 24)	/ 1.5f);
 			}
 		}
 		
@@ -105,7 +106,7 @@ public class BSUtils {
 		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGB, GL11.GL_FLOAT, buffer);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_FLOAT, buffer);
 		Texture t = new Texture(id, width, height, Format.RGBA);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		return t;

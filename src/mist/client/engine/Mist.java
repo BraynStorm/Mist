@@ -81,7 +81,6 @@ public class Mist {
 	}
 	
 	public float getConfigValuef(String name){
-		System.out.println(name);
 		return (float)config.get(name);
 	}
 	

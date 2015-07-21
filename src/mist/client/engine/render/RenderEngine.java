@@ -88,10 +88,13 @@ public class RenderEngine {
 				//for(Drawable drawble : gui){ TODO
 				//	
 				//}
-				fontTransform.setTranslation(0.5f, 0.5f, 1);
-				fontTransform.setRotation(0 , 0, movement * 100);
+				fontTransform.setTranslation(0.5f, -2f, 1);
+				font.drawString(fontTransform, "LOsaL", null);
+				fontTransform.setRotation(0,  movement * 100, 0);
+				//fontTransform.setScale(1, 1, 1);
 				//font.renderChar(0, fontTransform);
-				font.drawString(fontTransform, "LOL", new Vector4f(5,5,5,1));
+				
+				font.drawString(fontTransform, "LOaL", null);
 				break;
 			case LOADING:
 				break;
@@ -119,7 +122,7 @@ public class RenderEngine {
 		
 		ModelLoader.loadModel("tex_cube");
 		
-		font = FontLibrary.requestFontWithSize(guiShader, "Calibri", Font.TRUETYPE_FONT, 20);
+		font = FontLibrary.requestFontWithSize(guiShader, "Calibri", Font.TRUETYPE_FONT, 40);
 		
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
 		world.get(0).setTranslation(0, 0, 5f);
@@ -127,6 +130,8 @@ public class RenderEngine {
 		
 		guiShader.bind();
 		guiShader.setUniformi("model_isFont", 1);
+		
+		System.out.println(font.getWidth("LOL"));
 	}
 	
 	public static void addToWorldRender(Model object){

@@ -67,7 +67,7 @@ public class Window implements Closeable {
 		glEnable(GL_DEPTH_TEST);
 		
 		glFrontFace(GL_CW);
-		glEnable(GL_CULL_FACE);
+		//glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		
 		glEnable(GL_BLEND);

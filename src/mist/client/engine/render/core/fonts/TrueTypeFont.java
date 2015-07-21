@@ -6,8 +6,12 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+
+import javax.imageio.ImageIO;
 
 import org.lwjgl.BufferUtils;
 
@@ -15,6 +19,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
+import mist.client.engine.Mist;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Texture;
 import mist.client.engine.render.core.Transform;
@@ -65,9 +70,11 @@ public class TrueTypeFont {
 		
 		IntBuffer buffer = BufferUtils.createIntBuffer(6);
 		buffer.put(new int[]{
-				2,1,0,
+				0,1,2,
 				1,2,3
 		});
+		
+		buffer.flip();
 		
 		quadIBO = glGenBuffers();
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadIBO);
@@ -144,9 +151,9 @@ public class TrueTypeFont {
 		int positionX = 0;
 		int positionY = 0;
 		
-		for (int i = 32; i < 256; i++) {
+		for (int i = 0; i < 224; i++) {
 			
-			char ch = (char) i;
+			char ch = (char) (i + 32);
 			
 			BufferedImage fontImage = getFontImage(ch);
 
@@ -181,12 +188,20 @@ public class TrueTypeFont {
 
 			positionX += newIntObject.width;
 			
-			charArray[i - 32] = newIntObject;
+			charArray[i] = newIntObject;
 			fontImage = null;
 		}
 		
 		for(int i = 0; i < 224; i++)
 			glyphDataProcessing(i, imgTemp);
+		
+		File of = new File(Mist.dataFolder + "/image.png");
+		try {
+			ImageIO.write(imgTemp, "png", of);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		fontTexture = BSUtils.textureFromBufferedImage(imgTemp);
 	}
@@ -206,11 +221,12 @@ public class TrueTypeFont {
 		
 		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(4*5);
-		buffer.put(0)					.put(0)					.put(1)		.put(realX1)		.put(realY2);
-		buffer.put(intObject.width)		.put(0)					.put(1)		.put(realX2)		.put(realY2);
+		buffer.put(0)			.put(0)		.put(1)		.put(realX1)		.put(realY2);
+		buffer.put(intObject.width)		.put(0)		.put(1)		.put(realX2)		.put(realY2);
 		buffer.put(intObject.width)		.put(intObject.height)	.put(1)		.put(realX2)		.put(realY1);
-		buffer.put(0)					.put(intObject.height)	.put(1)		.put(realX1)		.put(realY1);
+		buffer.put(0)			.put(intObject.height)	.put(1)		.put(realX1)		.put(realY1);
 		buffer.flip();
+		
 		vboArray[i] = glGenBuffers();
 		glBindBuffer(GL_ARRAY_BUFFER, vboArray[i]);
 		glBufferData(GL_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
@@ -242,7 +258,8 @@ public class TrueTypeFont {
 		int currentChar = 0;
 		for (int i = 0; i < whatchars.length(); i++) {
 			currentChar = whatchars.charAt(i);
-			intObject = charArray[currentChar];
+			
+			intObject = charArray[currentChar+32];
 			
 			
 			if( intObject != null )
@@ -276,9 +293,9 @@ public class TrueTypeFont {
 		
 		
 		for (int i = 0; i < whatchars.length(); i++) {
-			int charCurrent = whatchars.charAt(i);
+			int charCurrent = whatchars.charAt(i)-32;
 			
-			if(charCurrent < 32){
+			if(charCurrent < 0){
 				//Something has messed up. Horribly.
 				new Exception().printStackTrace();
 				return;
@@ -290,7 +307,7 @@ public class TrueTypeFont {
 				shader.setUniform("model_transform", transform.getTansformation());
 				shader.setUniform("model_color", (color != null) ? color : new Vector4f(0,0,0,1));
 				drawQuad(charCurrent);
-				transform.moveBy(intObject.width, 0, 0);
+				transform.moveBy(0.1f, 0, 0);
 			}
 		}
 		shader.setUniformi("model_isFont", 0);
