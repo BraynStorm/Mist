@@ -92,9 +92,10 @@ public class RenderEngine {
 				
 				guiShader.bind();
 				guiShader.setUniformf("screen_aspect_ratio", BSUtils.getAspectRatio(window));
-				//for(Drawable drawble : gui){ TODO
-				//	
-				//}
+				
+				for(Drawable drawble : gui){
+					drawble.render();
+				}
 				
 				
 				fontTransform.setRotation(0, 0, movement*100);

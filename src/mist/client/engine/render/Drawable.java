@@ -20,7 +20,7 @@ import mist.client.engine.render.core.Vector3f;
 import mist.client.engine.render.core.Vector4f;
 import mist.client.engine.render.core.Vertex;
 
-public abstract class Drawable {
+public abstract class Drawable implements IDrawable{
 	
 	protected Shader shader;
 	protected Transform transform;

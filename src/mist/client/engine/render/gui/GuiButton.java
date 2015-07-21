@@ -7,7 +7,7 @@ import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Transform;
 
 public class GuiButton extends GuiBaseActiveElement {
-
+	
 	public GuiButton(Shader shader, int vbo, int ibo, int drawCount,
 			Material material) {
 		super(shader, vbo, ibo, drawCount, material);
@@ -31,17 +31,4 @@ public class GuiButton extends GuiBaseActiveElement {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void renderForeground() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void renderBackground() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

@@ -3,37 +3,33 @@ package mist.client.engine.render.gui.shapes;
 import java.nio.FloatBuffer;
 import java.util.ArrayList;
 
-import org.lwjgl.BufferUtils;
-
 import mist.client.engine.Mist;
-import mist.client.engine.Window;
+import mist.client.engine.render.Drawable;
 import mist.client.engine.render.core.Material;
 import mist.client.engine.render.core.Shader;
+import mist.client.engine.render.core.Texture;
+import mist.client.engine.render.core.TransformGUI;
 import mist.client.engine.render.core.Vector3f;
 import mist.client.engine.render.core.Vertex;
-import mist.client.engine.render.gui.GuiBaseElement;
 
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL12.*;
-import static org.lwjgl.opengl.GL13.*;
-import static org.lwjgl.opengl.GL14.*;
 import static org.lwjgl.opengl.GL15.*;
-import static org.lwjgl.opengl.GL20.*;
-import static org.lwjgl.opengl.GL21.*;
 
-public class Rectangle extends GuiBaseElement{
+public class Rectangle extends Drawable{
 	
 	private float width;
 	private float height;
+	private Texture texture;
+	private TransformGUI transform;
+	private Vector3f color;
 	
-	public Rectangle(Shader shader, int width, int height, int textureID) {
-		super(shader, glGenBuffers(), glGenBuffers(), 4, new Material(textureID));
+	public Rectangle(Shader shader, int width, int height, Texture texture) {
+		super(shader, glGenBuffers(), glGenBuffers(), 4, new Material(texture.textureID));
 		
 		this.width = width;
 		this.height = height;
 		
-		float w = width / Mist.getInstance().getWindow().getWidth();
-		float h = height/ Mist.getInstance().getWindow().getHeight();
+		float w = (float)(width)  / Mist.getInstance().getWindow().getWidth();
+		float h = (float)(height) / Mist.getInstance().getWindow().getHeight();
 		float w2 = w/2;
 		float h2 = h/2;
 		
@@ -64,14 +60,4 @@ public class Rectangle extends GuiBaseElement{
 	public boolean hasTexture(){
 		return material.getTextureID() != 0;
 	}
-	
-	@Override
-	public void renderForeground() {}
-
-	@Override
-	public void renderBackground() {
-		
-		
-	}
-
 }

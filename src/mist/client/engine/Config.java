@@ -32,7 +32,7 @@ public class Config {
 		defaultProps.put("zFar_LOADING", 1000f);
 		
 		
-		defaultProps.put("mouse_speed", 10f);
+		defaultProps.put("mouse_speed", 5f);
 	}
 	
 	public Object get(String name){

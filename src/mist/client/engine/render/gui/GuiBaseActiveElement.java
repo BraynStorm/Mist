@@ -2,11 +2,12 @@ package mist.client.engine.render.gui;
 
 import mist.client.engine.event.KeyEvent;
 import mist.client.engine.event.MouseEvent;
+import mist.client.engine.render.Drawable;
 import mist.client.engine.render.core.Material;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Transform;
 
-public abstract class GuiBaseActiveElement extends GuiBaseElement {
+public abstract class GuiBaseActiveElement extends Drawable {
 	
 	public GuiBaseActiveElement(Shader shader, int vbo, int ibo, int drawCount, Material material) {
 		super(shader, vbo, ibo, drawCount, material);

@@ -38,7 +38,7 @@ public class EventManager {
 	}
 	
 	public static void keyEvent(int keycode, int action, int mods){
-		boolean keyDown = (action == GLFW.GLFW_KEY_DOWN || action == GLFW.GLFW_REPEAT);
+		boolean keyDown = (action == GLFW.GLFW_PRESS || action == GLFW.GLFW_REPEAT);
 		pressedKeys[keycode] = keyDown;
 		
 		//System.out.println(action);
