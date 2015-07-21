@@ -1,9 +1,9 @@
 package mist.client.engine.render.core;
 
 public class Transform {
-	private Vector3f translation;
-	private Vector3f rotation;
-	private Vector3f scale;
+	protected Vector3f translation;
+	protected Vector3f rotation;
+	protected Vector3f scale;
 
 	public Transform() {
 		translation = new Vector3f(0, 0, 0);

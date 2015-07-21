@@ -11,10 +11,12 @@ import mist.client.engine.render.core.Camera;
 import mist.client.engine.render.core.Model;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Transform;
+import mist.client.engine.render.core.TransformGUI;
 import mist.client.engine.render.core.Vector4f;
 import mist.client.engine.render.core.fonts.FontLibrary;
 import mist.client.engine.render.core.fonts.TrueTypeFont;
 import mist.client.engine.render.loaders.ModelLoader;
+import mist.client.engine.render.utils.BSUtils;
 
 
 public class RenderEngine {
@@ -41,16 +43,18 @@ public class RenderEngine {
 		worldShader.addUniform("model_transform");
 		worldShader.addUniform("model_color");
 		worldShader.addUniform("model_hasTexture");
-		worldShader.addUniform("camera_transform");
+		worldShader.addUniform("camera_translation");
+		worldShader.addUniform("camera_rotation");
 		worldShader.addUniform("bone");
 		
 		guiShader.loadShader("gui");
 		guiShader.addUniform("model_isFont");
 		guiShader.addUniform("model_transform");
+		guiShader.addUniform("screen_aspect_ratio");
 		guiShader.addUniform("model_color");
 		guiShader.addUniform("model_hasTexture");
 		
-		fontTransform = new Transform();
+		fontTransform = new TransformGUI();
 		
 		loadLoginScreen();
 	}
@@ -64,7 +68,8 @@ public class RenderEngine {
 		nowState = Mist.getInstance().getGameState();
 		
 		worldShader.bind();
-		worldShader.setUniform("camera_transform", camera.getTransform());
+		worldShader.setUniform("camera_translation", camera.getTranslation());
+		worldShader.setUniform("camera_rotation", camera.getRotation());
 		
 		if(!lastState.equals(nowState) && !nowState.equals(GameState.UNKNOWN) && !nowState.equals(GameState.BOOTINGUP)){
 			worldShader.setUniform("projection_transform", Transform.getProjection(nowState.toString()));
@@ -80,21 +85,20 @@ public class RenderEngine {
 				
 				worldShader.bind();
 				for(Model model : world){
-					//model.render();
-					model.setRotation(-30f, movement * 100, 0);
+					font.getFontTexture().bind();
+					model.render();
+					//model.setRotation(-30f, movement * 100, 0);
 				}
 				
 				guiShader.bind();
+				guiShader.setUniformf("screen_aspect_ratio", BSUtils.getAspectRatio(window));
 				//for(Drawable drawble : gui){ TODO
 				//	
 				//}
-				fontTransform.setTranslation(0.5f, -2f, 1);
-				font.drawString(fontTransform, "LOsaL", null);
-				fontTransform.setRotation(0,  movement * 100, 0);
-				//fontTransform.setScale(1, 1, 1);
-				//font.renderChar(0, fontTransform);
 				
-				font.drawString(fontTransform, "LOaL", null);
+				
+				fontTransform.setRotation(0, 0, movement*100);
+				font.drawString(fontTransform, "ASDFG_asdfg", null);
 				break;
 			case LOADING:
 				break;
@@ -116,7 +120,7 @@ public class RenderEngine {
 	
 	
 	private static TrueTypeFont font;
-	private static Transform fontTransform;
+	private static TransformGUI fontTransform;
 	
 	private static void loadLoginScreen(){
 		
@@ -125,8 +129,7 @@ public class RenderEngine {
 		font = FontLibrary.requestFontWithSize(guiShader, "Calibri", Font.TRUETYPE_FONT, 40);
 		
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
-		world.get(0).setTranslation(0, 0, 5f);
-		
+		world.get(0).setTranslation(1, 0, 15f);
 		
 		guiShader.bind();
 		guiShader.setUniformi("model_isFont", 1);

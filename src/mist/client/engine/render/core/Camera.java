@@ -59,6 +59,26 @@ public class Camera {
 		pos = pos.add(dir.mul(amount));
 	}
 	
+	public void moveForward(float amount){
+		if(lockPos) return;
+		pos = pos.add(forward.mul(amount));
+	}
+	
+	public void moveBackward(float amount){
+		if(lockPos) return;
+		pos = pos.add(forward.getInverted().mul(amount));
+	}
+	
+	public void moveLeft(float amount){
+		if(lockPos) return;
+		pos = pos.add(getRight().mul(amount));
+	}
+	
+	public void moveRight(float amount){
+		if(lockPos) return;
+		pos = pos.add(getLeft().mul(amount));
+	}
+	
 	public Vector3f getLeft(){
 		return up.cross(forward).normalize(); // deabtable
 	}
@@ -102,6 +122,7 @@ public class Camera {
 		if(respectLimits){
 			if(lockRotY) return;
 		}
+		
 		Vector3f horizontalAxis = Y_AXIS.cross(forward).normalize();
 		
 		forward.rotate(angle, Y_AXIS);
@@ -111,11 +132,18 @@ public class Camera {
 		up.normalize();
 		
 	}
-
+	@Deprecated
 	public Matrix4f getTransform() {
 		Matrix4f rotation = new Matrix4f().camera(forward, up);
 		Matrix4f position = new Matrix4f().translation(pos.getInverted());
 		return position.mul(rotation);
 	}
 	
+	public Matrix4f getTranslation(){
+		return new Matrix4f().translation(pos.getInverted());
+	}
+	
+	public Matrix4f getRotation(){
+		return new Matrix4f().camera(forward, up);
+	}
 }

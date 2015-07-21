@@ -16,6 +16,7 @@ public class EventManager {
 	
 	public static Mouse mouse;
 	public static KeyEventManager keyboard;
+	protected static WindowEvent windowResizeEvent;
 	
 	private static boolean[] pressedKeys = new boolean[348];
 	
@@ -25,6 +26,7 @@ public class EventManager {
 		window = windowID;
 		mouse = new Mouse(windowID);
 		keyboard = new KeyEventManager(windowID);
+		windowResizeEvent = new WindowEvent(windowID);
 	}
 	
 	public static void prepare(){
@@ -46,7 +48,19 @@ public class EventManager {
 		// TODO: MOVEMENT!!!!
 		
 		if(pressedKeys[GLFW.GLFW_KEY_W]){
-			camera.move(camera.getForward(), (float)Time.getDeltaSeconds() * 1);
+			camera.moveForward((float)(Time.getDeltaSeconds() * 1e4));
+		}
+		
+		if(pressedKeys[GLFW.GLFW_KEY_S]){
+			camera.moveBackward((float)(Time.getDeltaSeconds() * 1e4));
+		}
+		
+		if(pressedKeys[GLFW.GLFW_KEY_A]){
+			camera.moveLeft((float)(Time.getDeltaSeconds() * 1e4));
+		}
+		
+		if(pressedKeys[GLFW.GLFW_KEY_D]){
+			camera.moveRight((float)(Time.getDeltaSeconds() * 1e4));
 		}
 	}
 	
@@ -70,5 +84,10 @@ public class EventManager {
 			camera.rotateX(-(float)y / mouseSpeed, true);
 			camera.rotateY(-(float)x / mouseSpeed, true);
 		}
+	}
+
+	public static void framebufferResize(int width, int height) {
+		if(Mist.getInstance() != null)
+			Mist.getInstance().getWindow().framebufferResize(width, height);
 	}
 }

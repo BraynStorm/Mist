@@ -3,12 +3,15 @@ package mist.client.engine;
 import java.io.Closeable;
 import java.io.IOException;
 import java.nio.DoubleBuffer;
+import java.nio.IntBuffer;
 
 import mist.client.engine.event.EventManager;
 
 import org.lwjgl.BufferUtils;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWvidmode;
+import org.lwjgl.opengl.GL;
+import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
 
 import static org.lwjgl.opengl.GL11.*;
@@ -67,7 +70,7 @@ public class Window implements Closeable {
 		glEnable(GL_DEPTH_TEST);
 		
 		glFrontFace(GL_CW);
-		//glEnable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		
 		glEnable(GL_BLEND);
@@ -86,17 +89,28 @@ public class Window implements Closeable {
 	}
 	
 	public void setSize(int nWidth, int nHeight){
-		width = nWidth;
-		height = nHeight;
-		
 		GLFW.glfwSetWindowSize(windowID, width, height);
+		framebufferResize(nWidth, nHeight);
+	}
+	
+	public void framebufferResize(int nWidth, int nHeight){
+		IntBuffer buff1 = BufferUtils.createIntBuffer(1);
+		IntBuffer buff2 = BufferUtils.createIntBuffer(1);
 		
+		GLFW.glfwGetFramebufferSize(windowID, buff1, buff2);
+		
+		width = buff1.get(0);
+		height = buff2.get(0);
+		
+		//System.out.println(width);
+		
+		GL11.glViewport(0, 0, width, height);
+		show();
 	}
 	
 	public boolean shouldClose(){
 		return GLFW.glfwWindowShouldClose(windowID) == 1;
 	}
-	
 	
 	public void setTitle(String nTitle){
 		title = nTitle;

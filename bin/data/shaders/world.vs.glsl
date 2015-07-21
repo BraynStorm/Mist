@@ -41,7 +41,8 @@ layout (location = 1) in vec2 texCoord;
 
 uniform mat4 projection_transform;
 uniform mat4 model_transform;
-uniform mat4 camera_transform;
+uniform mat4 camera_translation;
+uniform mat4 camera_rotation;
 uniform mat4 bone;
 //uniform Bone bones[5];
 
@@ -63,5 +64,5 @@ void main(){
     model_transform0 = model_transform * bone;
   else
     model_transform0 = model_transform;
-  gl_Position = projection_transform * camera_transform * model_transform0 * vec4(position, 1.0);
+  gl_Position = projection_transform * camera_rotation * camera_translation * model_transform0 * vec4(position, 1.0);
 }

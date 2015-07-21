@@ -14,7 +14,7 @@ void main(){
     texPixel = texture2D(diffuse, texCoord0);
   }
   
-  if(model_isFont == 1){
+  if(model_isFont == 1 || model_isFont == 0){
       texPixel = vec4(model_color.xyz, texPixel.w);
       gl_FragColor = texPixel;
       return;

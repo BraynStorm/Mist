@@ -11,18 +11,15 @@ import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
-import javax.imageio.ImageIO;
-
 import org.lwjgl.BufferUtils;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
-import mist.client.engine.Mist;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Texture;
-import mist.client.engine.render.core.Transform;
+import mist.client.engine.render.core.TransformGUI;
 import mist.client.engine.render.core.Vector4f;
 import mist.client.engine.render.utils.BSUtils;
 
@@ -34,6 +31,10 @@ public class TrueTypeFont {
 	private boolean antiAlias;
 	
 	private Texture fontTexture;
+	public Texture getFontTexture() {
+		return fontTexture;
+	}
+
 	private int textureWidth = 512;
 	private int textureHeight = 512;
 	
@@ -58,6 +59,9 @@ public class TrueTypeFont {
 
 		/** Character's stored y position */
 		public int storedY;
+		
+		public float realW;
+		public float realH;
 	}
 
 	private Shader shader;
@@ -70,8 +74,8 @@ public class TrueTypeFont {
 		
 		IntBuffer buffer = BufferUtils.createIntBuffer(6);
 		buffer.put(new int[]{
-				0,1,2,
-				1,2,3
+				3,2,0,
+				2,1,0
 		});
 		
 		buffer.flip();
@@ -153,7 +157,7 @@ public class TrueTypeFont {
 		
 		for (int i = 0; i < 224; i++) {
 			
-			char ch = (char) (i + 32);
+			char ch = (char) (i);
 			
 			BufferedImage fontImage = getFontImage(ch);
 
@@ -179,10 +183,6 @@ public class TrueTypeFont {
 				rowHeight = newIntObject.height;
 			}
 			
-			//glyphData[ii] = new Vector4f(newIntObject.storedX, newIntObject.storedY, newIntObject.width, newIntObject.height);
-			
-			
-			
 			// Draw it here
 			g.drawImage(fontImage, positionX, positionY, null);
 
@@ -195,14 +195,6 @@ public class TrueTypeFont {
 		for(int i = 0; i < 224; i++)
 			glyphDataProcessing(i, imgTemp);
 		
-		File of = new File(Mist.dataFolder + "/image.png");
-		try {
-			ImageIO.write(imgTemp, "png", of);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		fontTexture = BSUtils.textureFromBufferedImage(imgTemp);
 	}
 	
@@ -210,21 +202,22 @@ public class TrueTypeFont {
 	private void glyphDataProcessing(int i, BufferedImage finalImage){
 		IntObject intObject = charArray[i];
 		
-		float realW = intObject.width / finalImage.getWidth();
-		float realH = intObject.height / finalImage.getHeight();
+		intObject.realW = (0.0f + intObject.width) / finalImage.getWidth();
+		intObject.realH = (0.0f + intObject.height) / finalImage.getHeight();
 		
 		//In tex coords the coordinates are correct. (Trust me, I'm your future self)
-		float realX1 = intObject.storedX / finalImage.getWidth(); // Left
-		float realY1 = intObject.storedY / finalImage.getHeight(); // Bottom
-		float realX2 = realW + realX1; // Right
-		float realY2 = realH + realY1; // Top
+		float realX1 = (0.0f + intObject.storedX) / finalImage.getWidth(); // Left
+		float realY1 = (0.0f + intObject.storedY) / finalImage.getHeight(); // Bottom
+		float realX2 = intObject.realW + realX1; // Right
+		float realY2 = intObject.realH + realY1; // Top
 		
 		
 		FloatBuffer buffer = BufferUtils.createFloatBuffer(4*5);
-		buffer.put(0)			.put(0)		.put(1)		.put(realX1)		.put(realY2);
-		buffer.put(intObject.width)		.put(0)		.put(1)		.put(realX2)		.put(realY2);
-		buffer.put(intObject.width)		.put(intObject.height)	.put(1)		.put(realX2)		.put(realY1);
-		buffer.put(0)			.put(intObject.height)	.put(1)		.put(realX1)		.put(realY1);
+		buffer.put(0)					.put(0)					.put(0)	.put(realX1)		.put(realY2);
+		buffer.put(intObject.realW)		.put(0)					.put(0)	.put(realX2)		.put(realY2);
+		buffer.put(intObject.realW)		.put(intObject.realH)	.put(0)	.put(realX2)		.put(realY1);
+		buffer.put(0)					.put(intObject.realH)	.put(0)	.put(realX1)		.put(realY1);
+		
 		buffer.flip();
 		
 		vboArray[i] = glGenBuffers();
@@ -259,7 +252,7 @@ public class TrueTypeFont {
 		for (int i = 0; i < whatchars.length(); i++) {
 			currentChar = whatchars.charAt(i);
 			
-			intObject = charArray[currentChar+32];
+			intObject = charArray[currentChar];
 			
 			
 			if( intObject != null )
@@ -286,14 +279,15 @@ public class TrueTypeFont {
 	 * @param whatchars the string to render
 	 * @param color a Vector4f (RGBA). Black if null
 	 */
-	public void drawString(Transform transform, String whatchars, Vector4f color) {
+	public void drawString(TransformGUI transform, String whatchars, Vector4f color) {
 		fontTexture.bind();
 		shader.setUniformi("model_hasTexture", 1);
 		shader.setUniformi("model_isFont", 1);
 		
+		float moved = 0;
 		
 		for (int i = 0; i < whatchars.length(); i++) {
-			int charCurrent = whatchars.charAt(i)-32;
+			int charCurrent = whatchars.charAt(i);
 			
 			if(charCurrent < 0){
 				//Something has messed up. Horribly.
@@ -307,9 +301,11 @@ public class TrueTypeFont {
 				shader.setUniform("model_transform", transform.getTansformation());
 				shader.setUniform("model_color", (color != null) ? color : new Vector4f(0,0,0,1));
 				drawQuad(charCurrent);
-				transform.moveBy(0.1f, 0, 0);
+				transform.moveBy(intObject.realW, 0, 0);
+				moved += intObject.realW;
 			}
 		}
+		transform.moveBy(-moved, 0, 0);
 		shader.setUniformi("model_isFont", 0);
 	}
 

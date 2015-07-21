@@ -6,6 +6,7 @@ import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
 
+import mist.client.engine.Window;
 import mist.client.engine.render.core.Texture;
 import mist.client.engine.render.core.Vector2f;
 import mist.client.engine.render.core.Vector3f;
@@ -85,20 +86,20 @@ public class BSUtils {
 		int height = img.getHeight();
 		int color = 0;
 		
-		FloatBuffer buffer = BufferUtils.createFloatBuffer(width  * height * 4);
+		ByteBuffer buffer = BufferUtils.createByteBuffer(width  * height * 4);
 		
-		for(int i = height - 1; i >= 0; i--){
+		for(int i = 0; i < height; i++){
 			for(int j = 0; j < width; j++){
-				color = img.getRGB(i, j);
-				buffer.put( ((color & 0xFF0000) >> 16)		/ 255);
-				buffer.put( ((color & 0xFF00)   >> 8)		/ 255);
-				buffer.put(  (color & 0xFF)					/ 255);
-				buffer.put( ((color & 0xFF000000) >>> 24)	/ 1.5f);
+				color = img.getRGB(j, i);
+				buffer.put((byte) ((color >> 16)  & 0xFF));
+				buffer.put((byte) ((color >>  8)  & 0xFF));
+				buffer.put((byte)  (color & 0xFF) );
+				buffer.put((byte) ((color >> 24) & 0xFF));
 			}
 		}
 		
 		
-		buffer.flip(); // TODO: Chcek if flipping is neaded;
+		buffer.flip();
 		
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
@@ -106,9 +107,14 @@ public class BSUtils {
 		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
 		GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
 		
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_FLOAT, buffer);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, width, height, 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 		Texture t = new Texture(id, width, height, Format.RGBA);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 		return t;
+	}
+	
+	public static float getAspectRatio(Window window){
+		return (0.0f + window.getWidth()) / window.getHeight();
+		
 	}
 }
