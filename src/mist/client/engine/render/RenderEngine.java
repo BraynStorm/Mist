@@ -48,9 +48,7 @@ public class RenderEngine {
 		worldShader.addUniform("bone");
 		
 		guiShader.loadShader("gui");
-		guiShader.addUniform("model_isFont");
-		guiShader.addUniform("model_transform");
-		guiShader.addUniform("screen_aspect_ratio");
+		guiShader.addUniform("transform");
 		guiShader.addUniform("model_color");
 		guiShader.addUniform("model_hasTexture");
 		
@@ -91,14 +89,13 @@ public class RenderEngine {
 				}
 				
 				guiShader.bind();
-				guiShader.setUniformf("screen_aspect_ratio", BSUtils.getAspectRatio(window));
 				
 				for(Drawable drawble : gui){
 					drawble.render();
 				}
 				
 				
-				fontTransform.setRotation(0, 0, movement*100);
+				fontTransform.setRotation(0,0, movement*10);
 				font.drawString(fontTransform, "ASDFG_asdfg", null);
 				break;
 			case LOADING:
@@ -128,12 +125,13 @@ public class RenderEngine {
 		ModelLoader.loadModel("tex_cube");
 		
 		font = FontLibrary.requestFontWithSize(guiShader, "Calibri", Font.TRUETYPE_FONT, 40);
+		fontTransform.setScreenTranslation(-200,0);//(window.getHeight()/2) - font.getLineHeight()
+		
 		
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
-		world.get(0).setTranslation(1, 0, 15f);
+		world.get(0).setTranslation(0, 0, 15f);
 		
 		guiShader.bind();
-		guiShader.setUniformi("model_isFont", 1);
 		
 		System.out.println(font.getWidth("LOL"));
 	}

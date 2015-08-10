@@ -77,13 +77,11 @@ public class Matrix4f {
 	}
 	public Matrix4f scale(float x, float y, float z){ return scale(new Vector3f(x, y, z)); }
 
-	public Matrix4f rotate(Vector3f rot) {
-		
+	public Matrix4f rotate(Vector3f r) {
+		Vector3f rot = BSUtils.getRadianizedVector3f(r);
 		Matrix4f rx = new Matrix4f();
 		Matrix4f ry = new Matrix4f();
 		Matrix4f rz = new Matrix4f();
-		
-		BSUtils.radianizeVector3f(rot);
 		
 		/* ...Errmahghurrrd... */
 		rz.m[0][0] =  (float)Math.cos(rot.z);		rz.m[0][1] = -(float)Math.sin(rot.z);		rz.m[0][2] = 0;								rz.m[0][3] = 0;

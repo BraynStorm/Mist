@@ -3,7 +3,6 @@
 uniform sampler2D diffuse;
 uniform vec4 model_color;
 uniform int model_hasTexture;
-uniform int model_isFont;
 
 in vec2 texCoord0;
 
@@ -14,11 +13,10 @@ void main(){
     texPixel = texture2D(diffuse, texCoord0);
   }
   
-  if(model_isFont == 1 || model_isFont == 0){
-      texPixel = vec4(model_color.xyz, texPixel.w);
-      gl_FragColor = texPixel;
-      return;
-  }
+  
+  texPixel = vec4(model_color.xyz, texPixel.w);
+  gl_FragColor = texPixel;
+  return;
   
   if(texPixel.w <= 0.3){
     gl_FragColor = vec4(model_color.xyz, 1);

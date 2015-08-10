@@ -20,6 +20,16 @@ public class Transform {
 		return translationMatrix.mul(rotationMatrix.mul(scaleMatrix));
 	}
 	
+	public Matrix4f getTranslationMatrix(){
+		return new Matrix4f().translation(translation);
+	}
+	public Matrix4f getRotationMatrix(){
+		return new Matrix4f().rotate(translation);
+	}
+	public Matrix4f getScaleMatrix(){
+		return new Matrix4f().scale(translation);
+	}
+	
 	public static Matrix4f getProjection(String suffix) {
 		return new Matrix4f().projection(suffix);
 	}

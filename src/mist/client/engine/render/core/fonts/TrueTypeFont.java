@@ -6,8 +6,6 @@ import java.awt.FontMetrics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 
@@ -282,7 +280,6 @@ public class TrueTypeFont {
 	public void drawString(TransformGUI transform, String whatchars, Vector4f color) {
 		fontTexture.bind();
 		shader.setUniformi("model_hasTexture", 1);
-		shader.setUniformi("model_isFont", 1);
 		
 		float moved = 0;
 		
@@ -298,15 +295,13 @@ public class TrueTypeFont {
 			IntObject intObject = charArray[charCurrent];
 			
 			if( intObject != null ) {
-				shader.setUniform("model_transform", transform.getTansformation());
+				shader.setUniform("transform", transform.getTansformation(moved));
 				shader.setUniform("model_color", (color != null) ? color : new Vector4f(0,0,0,1));
 				drawQuad(charCurrent);
-				transform.moveBy(intObject.realW, 0, 0);
 				moved += intObject.realW;
 			}
+			
 		}
-		transform.moveBy(-moved, 0, 0);
-		shader.setUniformi("model_isFont", 0);
 	}
 
 	public float getSize() {

@@ -76,7 +76,14 @@ public class BSUtils {
 		vector.x = (float)Math.toRadians(vector.x);
 		vector.y = (float)Math.toRadians(vector.y);
 		vector.z = (float)Math.toRadians(vector.z);
-		
+	}
+	
+	public static Vector3f getRadianizedVector3f(Vector3f vector) {
+		Vector3f v = new Vector3f(0,0,0);
+		v.x = (float)Math.toRadians(vector.x);
+		v.y = (float)Math.toRadians(vector.y);
+		v.z = (float)Math.toRadians(vector.z);
+		return v;
 	}
 	
 	public static Texture textureFromBufferedImage(BufferedImage img){

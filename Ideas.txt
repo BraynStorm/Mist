@@ -1,0 +1,14 @@
+﻿{
+  Classes:[
+    {name: "Runemaster", description: "Runes like in Fallen Angels(Stealth runes, traps, rogue-like class)"},
+    {name: "Blademaster", description: "Infuses his weapons with buffs and (warrior/shaman/paladin mash-up)"}
+    
+  ],
+  Items:[
+  
+  ],
+  NCPs:[
+    {name: "Joe \"Cotton Eye\"", description: "TBI"}
+  ]
+  
+}

@@ -132,12 +132,6 @@ public class Camera {
 		up.normalize();
 		
 	}
-	@Deprecated
-	public Matrix4f getTransform() {
-		Matrix4f rotation = new Matrix4f().camera(forward, up);
-		Matrix4f position = new Matrix4f().translation(pos.getInverted());
-		return position.mul(rotation);
-	}
 	
 	public Matrix4f getTranslation(){
 		return new Matrix4f().translation(pos.getInverted());
