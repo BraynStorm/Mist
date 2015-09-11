@@ -106,7 +106,8 @@ public class Shader {
 	}
 	
 	public void setUniform(String uniform, Matrix4f value){
-		glUniformMatrix4fv(uniforms.get(uniform), true, BSUtils.bufferFromArray(value.getData()));
+		glUniformMatrix4fv(uniforms.get(uniform), true,
+				BSUtils.bufferFromArray(value.getData()));
 	}
 	
 	

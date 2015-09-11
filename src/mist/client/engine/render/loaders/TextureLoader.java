@@ -20,6 +20,10 @@ public class TextureLoader {
 	private static HashMap<String, Texture> textures = new HashMap<String, Texture>();
 	
 	public static Texture loadTexture(String name, boolean flipped, int filter){
+		return loadTexture(name, flipped, true, filter);
+	}
+	
+	public static Texture loadTexture(String name, boolean flipped, boolean repeat, int filter){
 		try {
 			PNGDecoder decoder = new PNGDecoder(new FileInputStream(new File(texturesPath + name + ".png")));
 			ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
@@ -30,11 +34,11 @@ public class TextureLoader {
 			
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, textureID);
 			
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL11.GL_REPEAT);
-			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL11.GL_REPEAT);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, repeat ? GL11.GL_REPEAT : GL11.GL_CLAMP);
+			GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, repeat ? GL11.GL_REPEAT : GL11.GL_CLAMP);
 			
-			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_LINEAR);
-			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, GL11.GL_LINEAR);
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, filter);
+			GL11.glTexParameterf(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MAG_FILTER, filter);
 			
 			GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, GL11.GL_RGBA, decoder.getWidth(), decoder.getHeight(), 0, GL11.GL_RGBA, GL11.GL_UNSIGNED_BYTE, buffer);
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
@@ -60,7 +64,10 @@ public class TextureLoader {
 	}
 	
 	public static Texture getTexture(String name){
-		return textures.get(name);
+		Texture t = textures.get(name);
+		if(t == null)
+			return loadTexture(name, false, GL11.GL_LINEAR);
+		return t;
 	}
 	
 	public static void unload(String name){

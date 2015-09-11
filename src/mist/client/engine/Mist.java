@@ -47,7 +47,7 @@ public class Mist {
 		gameState = GameState.BOOTINGUP;
 		clientVersion = Version.maybeRead("Pre-Pre-Pre-Alpha");
 		config = new Config("config");
-		gameWindow = Window.create(800, 600, "Mist Client " + clientVersion.toString());
+		gameWindow = Window.create(800, 800, "Mist Client " + clientVersion.toString());
 		gameWindow.show();
 		camera = new Camera();
 		EventManager.setCamera(camera);

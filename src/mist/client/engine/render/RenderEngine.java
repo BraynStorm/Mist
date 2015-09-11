@@ -3,6 +3,8 @@ package mist.client.engine.render;
 import java.awt.Font;
 import java.util.ArrayList;
 
+import org.lwjgl.opengl.GL11;
+
 import mist.client.engine.GameState;
 import mist.client.engine.Mist;
 import mist.client.engine.Time;
@@ -10,13 +12,16 @@ import mist.client.engine.Window;
 import mist.client.engine.render.core.Camera;
 import mist.client.engine.render.core.Model;
 import mist.client.engine.render.core.Shader;
+import mist.client.engine.render.core.Texture;
 import mist.client.engine.render.core.Transform;
 import mist.client.engine.render.core.TransformGUI;
 import mist.client.engine.render.core.Vector4f;
 import mist.client.engine.render.core.fonts.FontLibrary;
 import mist.client.engine.render.core.fonts.TrueTypeFont;
+import mist.client.engine.render.gui.shapes.Rectangle;
+import mist.client.engine.render.gui.shapes.RoundedRectangle;
 import mist.client.engine.render.loaders.ModelLoader;
-import mist.client.engine.render.utils.BSUtils;
+import mist.client.engine.render.loaders.TextureLoader;
 
 
 public class RenderEngine {
@@ -24,6 +29,7 @@ public class RenderEngine {
 	private static Window window;
 	private static Shader worldShader = new Shader();
 	private static Shader guiShader = new Shader();
+	private static Shader guiButtonShader = new Shader();
 	private static Camera camera;
 	private static float fps = 0;
 	
@@ -48,9 +54,15 @@ public class RenderEngine {
 		worldShader.addUniform("bone");
 		
 		guiShader.loadShader("gui");
-		guiShader.addUniform("transform");
-		guiShader.addUniform("model_color");
-		guiShader.addUniform("model_hasTexture");
+		guiShader.addUniform("model_transform");
+		//guiShader.addUniform("model_color");
+		//guiShader.addUniform("model_hasTexture");
+		
+		guiButtonShader.loadShader("gui_button");
+		guiButtonShader.addUniform("innerAnimationTL");
+		guiButtonShader.addUniform("model_transform");
+		
+		Common.init();
 		
 		fontTransform = new TransformGUI();
 		
@@ -83,20 +95,21 @@ public class RenderEngine {
 				
 				worldShader.bind();
 				for(Model model : world){
-					font.getFontTexture().bind();
 					model.render();
 					//model.setRotation(-30f, movement * 100, 0);
 				}
 				
 				guiShader.bind();
 				
+				fontTransform.setRotation(0,0, movement * 10);
+				font.drawString(fontTransform, "[Player_Name]", new Vector4f(0,1,0, 1));
+				
 				for(Drawable drawble : gui){
 					drawble.render();
 				}
 				
+				button.render();
 				
-				fontTransform.setRotation(0,0, movement*10);
-				font.drawString(fontTransform, "ASDFG_asdfg", null);
 				break;
 			case LOADING:
 				break;
@@ -120,20 +133,34 @@ public class RenderEngine {
 	private static TrueTypeFont font;
 	private static TransformGUI fontTransform;
 	
+	private static TransformGUI buttonTransform;
+	private static RoundedRectangle button;
+	
+	private static Rectangle recteeed;
+	
 	private static void loadLoginScreen(){
 		
 		ModelLoader.loadModel("tex_cube");
 		
+		TextureLoader.loadTexture("button_corner", false, false, GL11.GL_LINEAR);
+		TextureLoader.loadTexture("button_stripe", false, false, GL11.GL_LINEAR);
+		
 		font = FontLibrary.requestFontWithSize(guiShader, "Calibri", Font.TRUETYPE_FONT, 40);
-		fontTransform.setScreenTranslation(-200,0);//(window.getHeight()/2) - font.getLineHeight()
+		fontTransform.setScreenTranslation(0,50);//(window.getHeight()/2) - font.getLineHeight()
+		
+		
+		buttonTransform = new TransformGUI();
+		buttonTransform.setScreenTranslation(405, 405);
+		
+		
+		button = new RoundedRectangle(guiShader, guiButtonShader, 400, 400, buttonTransform, "ASDdsadsasadsdasadsd");
+		
+		//Test:
 		
 		
 		world.add(ModelLoader.getNewModel("tex_cube", worldShader));
 		world.get(0).setTranslation(0, 0, 15f);
 		
-		guiShader.bind();
-		
-		System.out.println(font.getWidth("LOL"));
 	}
 	
 	public static void addToWorldRender(Model object){
@@ -147,7 +174,7 @@ public class RenderEngine {
 	public static void destroy() {
 		worldShader.delete();
 		guiShader.delete();
-		
+		guiButtonShader.delete();
 	}
 
 

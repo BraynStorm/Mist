@@ -15,6 +15,7 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL15.*;
 import static org.lwjgl.opengl.GL20.*;
 
+import mist.client.engine.render.Common;
 import mist.client.engine.render.core.Shader;
 import mist.client.engine.render.core.Texture;
 import mist.client.engine.render.core.TransformGUI;
@@ -43,7 +44,6 @@ public class TrueTypeFont {
 	
 	private String name;
 	private int style;
-	private static int quadIBO;
 	
 	private class IntObject {
 		/** Character's width */
@@ -64,26 +64,6 @@ public class TrueTypeFont {
 
 	private Shader shader;
 	
-	private static boolean initialized = false;
-	
-	private static void initializeIBO(){
-		if(initialized)
-			return;
-		
-		IntBuffer buffer = BufferUtils.createIntBuffer(6);
-		buffer.put(new int[]{
-				3,2,0,
-				2,1,0
-		});
-		
-		buffer.flip();
-		
-		quadIBO = glGenBuffers();
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadIBO);
-		glBufferData(GL_ELEMENT_ARRAY_BUFFER, buffer, GL_STATIC_DRAW);
-		initialized = true;
-	}
-	
 	public TrueTypeFont(Shader shader, Font font, String name, boolean antiAlias) {
 		
 		this.font = font;
@@ -92,7 +72,6 @@ public class TrueTypeFont {
 		this.name = name;
 		this.shader = shader;
 		
-		initializeIBO();
 		createSet();
 	}
 	
@@ -226,21 +205,13 @@ public class TrueTypeFont {
 	
 	private void drawQuad(int index) {
 		
-		glEnableVertexAttribArray(0);
-		glEnableVertexAttribArray(1);
-		
 		glBindBuffer(GL_ARRAY_BUFFER, vboArray[index]);
 		glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0); // positions
 		glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * 4, 12); // texCoords
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, quadIBO);
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, Common.RECTANGLE_IBO);
+		glDrawElements(GL_TRIANGLES, Common.RECTANGLE_DRAWCOUNT, GL_UNSIGNED_INT, 0);
 		
-		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
-		
-		glDisableVertexAttribArray(0);
-		glDisableVertexAttribArray(1);
 	}
 	
 	public int getWidth(String whatchars) {
@@ -279,10 +250,11 @@ public class TrueTypeFont {
 	 */
 	public void drawString(TransformGUI transform, String whatchars, Vector4f color) {
 		fontTexture.bind();
-		shader.setUniformi("model_hasTexture", 1);
 		
 		float moved = 0;
 		
+		glEnableVertexAttribArray(0);
+		glEnableVertexAttribArray(1);
 		for (int i = 0; i < whatchars.length(); i++) {
 			int charCurrent = whatchars.charAt(i);
 			
@@ -295,13 +267,17 @@ public class TrueTypeFont {
 			IntObject intObject = charArray[charCurrent];
 			
 			if( intObject != null ) {
-				shader.setUniform("transform", transform.getTansformation(moved));
-				shader.setUniform("model_color", (color != null) ? color : new Vector4f(0,0,0,1));
+				shader.setUniform("model_transform", transform.getFontTransformation(moved));
+				//shader.setUniform("model_color", (color != null) ? color : new Vector4f(0,0,0,1));
 				drawQuad(charCurrent);
 				moved += intObject.realW;
 			}
-			
 		}
+		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, 0);
+		glBindBuffer(GL_ARRAY_BUFFER, 0);
+		
+		glDisableVertexAttribArray(0);
+		glDisableVertexAttribArray(1);
 	}
 
 	public float getSize() {

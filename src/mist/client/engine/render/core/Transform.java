@@ -12,12 +12,23 @@ public class Transform {
 		
 	}
 	
-	public Matrix4f getTansformation(){
+	public Matrix4f getTransformation(){
 		Matrix4f translationMatrix = new Matrix4f().translation(translation);
 		Matrix4f scaleMatrix = new Matrix4f().scale(scale);
 		Matrix4f rotationMatrix = new Matrix4f().rotate(rotation);
 		
 		return translationMatrix.mul(rotationMatrix.mul(scaleMatrix));
+	}
+	
+	@Override
+	public String toString(){
+		StringBuilder sb = new StringBuilder();
+		
+		sb.append("Translation: ").append(translation.toString());
+		sb.append("Rotation: ").append(rotation.toString());
+		sb.append("Scale: ").append(scale.toString());
+		
+		return sb.toString();
 	}
 	
 	public Matrix4f getTranslationMatrix(){
@@ -67,7 +78,9 @@ public class Transform {
 	}
 	
 	public void setScale(float x, float y, float z) {
-		this.scale = new Vector3f(x, y, z);
+		this.scale.x = x;
+		this.scale.y = y;
+		this.scale.z = z;
 	}
 	
 	public void moveBy(float x, float y, float z){

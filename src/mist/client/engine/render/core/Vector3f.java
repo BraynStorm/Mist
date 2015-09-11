@@ -11,6 +11,13 @@ public class Vector3f {
 		this.z = z;
 	}
 	
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(x).append(", ").append(y).append(", ").append(z);
+		return sb.toString();
+	}
+	
 	public float[] getData(){
 		return new float[] { x, y, z };
 	}

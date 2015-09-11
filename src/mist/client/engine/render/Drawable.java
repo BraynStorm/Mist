@@ -38,7 +38,7 @@ public abstract class Drawable implements IDrawable{
 		this.ibo = ibo;
 		this.drawCount = drawCount;
 		this.material = material;
-		color = new Vector4f(1, 0, 0, .5f);
+		color = new Vector4f(0, 0, 0, 1);
 	}
 	
 	public Drawable(Shader shader, Transform transform, int vbo, int ibo, int drawCount, Material material) {
@@ -48,6 +48,7 @@ public abstract class Drawable implements IDrawable{
 		this.ibo = ibo;
 		this.drawCount = drawCount;
 		this.material = material;
+		color = new Vector4f(0, 0, 0, 1);
 	}
 	
 	public void setColor(float r, float g, float b, float a){
@@ -64,20 +65,18 @@ public abstract class Drawable implements IDrawable{
 	}
 	
 	public void render(){
-		
-		
 		glEnableVertexAttribArray(0);
 		glEnableVertexAttribArray(1);
 		
 		bindTexture();
 		
 		shader.setUniform("model_color", color);
-		shader.setUniform("model_transform", transform.getTansformation());
+		shader.setUniform("model_transform", transform.getTransformation());
 		shader.setUniformi("model_hasTexture", material.getTextureID() == 0 ? 0 : 1);
 		
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
-		glVertexAttribPointer(0, 3, GL_FLOAT, false, Vertex.SIZE * 4, 0); // positions
-		glVertexAttribPointer(1, 2, GL_FLOAT, false, Vertex.SIZE * 4, 12); // texCoords
+		glVertexAttribPointer(0, 3, GL_FLOAT, false, 5 * 4, 0); // positions
+		glVertexAttribPointer(1, 2, GL_FLOAT, false, 5 * 4, 12); // texCoords
 		
 		glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ibo);
 		glDrawElements(GL_TRIANGLES, drawCount, GL_UNSIGNED_INT, 0);
@@ -95,7 +94,7 @@ public abstract class Drawable implements IDrawable{
 	}
 	
 	public void setScale(float x, float y, float z){
-		transform.setScale(x,y,z);
+		transform.setScale(x, y, z);
 	}
 	
 	public void setTranslation(Vector3f translation){
@@ -103,10 +102,10 @@ public abstract class Drawable implements IDrawable{
 	}
 
 	public void setTranslation(float x, float y, float z){
-		transform.setTranslation(x,y,z);
+		transform.setTranslation(x, y, z);
 	}
 
 	public void setRotation(float x, float y, float z){
-		transform.setRotation(x,y,z);
+		transform.setRotation(x, y, z);
 	}
 }

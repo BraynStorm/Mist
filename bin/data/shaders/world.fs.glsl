@@ -13,11 +13,11 @@ void main(){
     texPixel = texture2D(diffuse, texCoord0);
   }
   
-  if(texPixel.w == 0.0){
-    //color.w = 1;
-    gl_FragColor = color;
+  if(texPixel.w == 1.0){
+    gl_FragColor = texPixel;
     return;
-  }else{
+  }
+  else{
     gl_FragColor = vec4(
               clamp(0, 1, model_color.x + texPixel.x),
               clamp(0, 1, model_color.y + texPixel.y),

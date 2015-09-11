@@ -18,7 +18,7 @@ public class EventManager {
 	public static KeyEventManager keyboard;
 	protected static WindowEvent windowResizeEvent;
 	
-	private static boolean[] pressedKeys = new boolean[348];
+	private static boolean[] pressedKeys = new boolean[MAX_KEYCODE];
 	
 	public static boolean mouseLocked = false;
 	
@@ -75,8 +75,10 @@ public class EventManager {
 				mouseLocked = false;
 		}
 		
-		//if(mouseLocked)
-			//GLFW.glfwSetInputMode(window, , value);
+		if(mouseLocked)
+			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_DISABLED);
+		else
+			GLFW.glfwSetInputMode(window, GLFW.GLFW_CURSOR, GLFW.GLFW_CURSOR_NORMAL);
 	}
 	
 	public static void mouseMove(int x, int y){
